@@ -19,7 +19,7 @@ module.exports = {
 		username: "postgres",
 		password: "uljcvKNwUUbYLcBzQGAptiGHFUAYbblM",
 		database: "railway",
-		host: "meticulous-empathy.railway.internal",
+		host: "autorack.proxy.rlwy.net",
 		dialect: "postgres",
 	},
 };

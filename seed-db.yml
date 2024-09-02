@@ -11,11 +11,11 @@ jobs:
 
         services:
             postgres:
-                image: postgres:13
+                image: postgres:16
                 env:
                     POSTGRES_USER: postgres
-                    POSTGRES_PASSWORD: postgres
-                    POSTGRES_DB: test_db
+                    POSTGRES_PASSWORD: uljcvKNwUUbYLcBzQGAptiGHFUAYbblM
+                    POSTGRES_DB: railway
                 ports:
                     - 5432:5432
                 options: >-
