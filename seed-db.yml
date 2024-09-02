@@ -1,0 +1,53 @@
+name: Seed Database
+
+on:
+    push:
+        branches:
+            - main # You can adjust this to your preferred branch
+
+jobs:
+    seed:
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:13
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: test_db
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Install Sequelize CLI
+              run: npm install --global sequelize-cli
+
+            - name: Wait for Postgres to be ready
+              run: until pg_isready -h localhost -p 5432; do sleep 1; done
+
+            - name: Run migrations
+              env:
+                  DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+              run: npx sequelize-cli db:migrate
+
+            - name: Seed the database
+              env:
+                  DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+              run: npx sequelize-cli db:seed:all
