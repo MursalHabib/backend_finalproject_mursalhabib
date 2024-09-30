@@ -1,15 +1,12 @@
 "use strict";
 const fs = require("fs");
+const path = require("path");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		let movies = JSON.parse(
-			fs.readFileSync(
-				"/Users/mursalhabib/hacktiv8/backend-stream/final-project/data/movies.json",
-				"utf8"
-			)
-		).map((el) => {
+		const filePath = path.resolve(__dirname, "../../data/movies.json");
+		let movies = JSON.parse(fs.readFileSync(filePath, "utf8")).map((el) => {
 			return {
 				title: el.title,
 				synopsis: el.synopsis,

@@ -20,6 +20,7 @@ module.exports = {
 		password: "uljcvKNwUUbYLcBzQGAptiGHFUAYbblM",
 		database: "railway",
 		host: "autorack.proxy.rlwy.net",
+		port: "11619",
 		dialect: "postgres",
 	},
 };

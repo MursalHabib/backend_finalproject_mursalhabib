@@ -11,6 +11,9 @@ app.use(express.json());
 app.use(errorHandler);
 
 app.use("/", require("./routes"));
+app.get("/", (req, res) =>
+	res.json({ message: "Welcome to Mursal Habib final project Backend" })
+);
 
 app.listen(PORT, async () => {
 	console.log("SERVER UP: http://127.0.0.1:", +PORT);
