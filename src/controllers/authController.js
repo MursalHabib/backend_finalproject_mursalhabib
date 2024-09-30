@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const { validationResult } = require("express-validator");
 const { Users } = require("../../db/models");
 const jwtGen = require("../utils/jwtGenerator");
 const UnauthenticatedError = require("../errors/UnauthenticatedError");
@@ -6,10 +7,19 @@ const ValidationError = require("../errors/ValidationError");
 
 module.exports = {
 	register: async (req, res, next) => {
-		const { name, username, email, password, address, phone_number } =
-			req.body;
+		const result = validationResult(req);
+
+		if (!result.isEmpty()) {
+			const message = result
+				.array()
+				.map((r) => r.msg)
+				.join(",");
+			return res.status(400).json(message);
+		}
 
 		try {
+			const { name, username, email, password, address, phone_number } =
+				req.body;
 			const checkUser = await Users.findOne({
 				where: { email },
 			});
