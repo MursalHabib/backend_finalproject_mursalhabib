@@ -8,6 +8,7 @@ module.exports = {
 	register: async (req, res, next) => {
 		const { name, username, email, password, address, phone_number } =
 			req.body;
+
 		try {
 			const checkUser = await Users.findOne({
 				where: { email },
@@ -15,6 +16,7 @@ module.exports = {
 			if (checkUser) {
 				throw new ValidationError("User already exist");
 			}
+
 			const bcryptPassword = await bcrypt.hash(
 				password,
 				bcrypt.genSaltSync(10)
