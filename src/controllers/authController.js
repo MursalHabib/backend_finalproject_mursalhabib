@@ -1,9 +1,11 @@
 const bcrypt = require("bcryptjs");
 const { Users } = require("../../db/models");
 const jwtGen = require("../utils/jwtGenerator");
+const UnauthenticatedError = require("../errors/UnauthenticatedError");
+const ValidationError = require("../errors/ValidationError");
 
 module.exports = {
-	register: async (req, res) => {
+	register: async (req, res, next) => {
 		const { name, username, email, password, address, phone_number } =
 			req.body;
 		try {
@@ -11,10 +13,7 @@ module.exports = {
 				where: { email },
 			});
 			if (checkUser) {
-				return res.status(400).json({
-					error: "Bad request",
-					message: "User already exist",
-				});
+				throw new ValidationError("User already exist");
 			}
 			const bcryptPassword = await bcrypt.hash(
 				password,
@@ -25,7 +24,7 @@ module.exports = {
 				name,
 				username,
 				email,
-				role: "ADMIN",
+				role: "USER",
 				address,
 				phone_number,
 				password: bcryptPassword,
@@ -43,30 +42,24 @@ module.exports = {
 				},
 			});
 		} catch (error) {
-			res.status(500).json({ error: error.message });
+			next(error);
 		}
 	},
-	login: async (req, res) => {
+	login: async (req, res, next) => {
 		const { email, password } = req.body;
 		try {
 			const checkUser = await Users.findOne({
 				where: { email },
 			});
 			if (!checkUser) {
-				return res.status(401).send({
-					error: "Unauthorized",
-					message: "Email Not found.",
-				});
+				throw new UnauthenticatedError("Email not found");
 			}
 			const passwordIsValid = bcrypt.compareSync(
 				password,
 				checkUser.password
 			);
 			if (!passwordIsValid) {
-				return res.status(401).send({
-					error: "Unauthorized",
-					message: "Invalid Password!",
-				});
+				throw new UnauthenticatedError("Invalid password");
 			}
 
 			const token = jwtGen(
@@ -87,8 +80,7 @@ module.exports = {
 				accessToken: token,
 			});
 		} catch (error) {
-			console.log(error.message);
-			res.status(500).send({ message: error.message });
+			next(error);
 		}
 	},
 };

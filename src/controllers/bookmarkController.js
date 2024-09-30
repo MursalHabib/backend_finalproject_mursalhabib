@@ -1,8 +1,9 @@
 const { Movies, Users } = require("../../db/models");
 var jwt = require("jsonwebtoken");
+const NotFoundError = require("../errors/NotFoundError");
 
 module.exports = {
-	createBookmark: async (req, res) => {
+	createBookmark: async (req, res, next) => {
 		const { movieId } = req.params;
 		const { accesstoken } = req.headers;
 		const decoded = jwt.verify(accesstoken, process.env.JWT_SECRET);
@@ -10,9 +11,7 @@ module.exports = {
 		try {
 			const findMovie = await Movies.findByPk(movieId);
 			if (!findMovie) {
-				return res
-					.status(404)
-					.json({ error: "Not found", message: "Movie not found" });
+				throw new NotFoundError("Movie not found");
 			}
 			const findUser = await Users.findByPk(id, {
 				include: [
@@ -23,9 +22,7 @@ module.exports = {
 				],
 			});
 			if (!findUser) {
-				return res
-					.status(404)
-					.json({ error: "Not found", message: "User not found" });
+				throw new NotFoundError("User not found");
 			}
 
 			await findUser.addMovies(findMovie);
@@ -37,11 +34,10 @@ module.exports = {
 			};
 			return res.status(201).json(parsed);
 		} catch (error) {
-			console.log(error);
-			res.status(500).json({ message: error.message });
+			next(error);
 		}
 	},
-	getMyBookmark: async (req, res) => {
+	getMyBookmark: async (req, res, next) => {
 		const { accesstoken } = req.headers;
 		const decoded = jwt.verify(accesstoken, process.env.JWT_SECRET);
 		const { id } = decoded.user;
@@ -65,8 +61,7 @@ module.exports = {
 			};
 			res.send(parsed);
 		} catch (error) {
-			console.log(error);
-			res.status(500).json({ message: error.message });
+			next(error);
 		}
 	},
 };
