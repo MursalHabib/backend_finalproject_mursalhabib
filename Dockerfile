@@ -11,8 +11,8 @@ ENV PROD_PG_HOST = autorack.proxy.rlwy.net
 ENV PROD_PORT = 11619
 ENV PROD_PG_DIALECT = postgres
 
-JWT_SECRET = secret
-JWT_EXPIRE = 24h
+ENV JWT_SECRET = secret
+ENV JWT_EXPIRE = 24h
 
 # Set the working directory inside the container
 WORKDIR /app
