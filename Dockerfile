@@ -2,14 +2,14 @@
 FROM node:lts-alpine
 
 # Set environment variables
-PORT = 3000
+ENV PORT = 3000
 
-PROD_PG_USERNAME = postgres
-PROD_PG_PASSWORD = uljcvKNwUUbYLcBzQGAptiGHFUAYbblM
-PROD_PG_DATABASE = railway
-PROD_PG_HOST = autorack.proxy.rlwy.net
-PROD_PORT = 11619
-PROD_PG_DIALECT = postgres
+ENV PROD_PG_USERNAME = postgres
+ENV PROD_PG_PASSWORD = uljcvKNwUUbYLcBzQGAptiGHFUAYbblM
+ENV PROD_PG_DATABASE = railway
+ENV PROD_PG_HOST = autorack.proxy.rlwy.net
+ENV PROD_PORT = 11619
+ENV PROD_PG_DIALECT = postgres
 
 JWT_SECRET = secret
 JWT_EXPIRE = 24h
