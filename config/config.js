@@ -16,11 +16,11 @@ module.exports = {
 		dialect: "mysql",
 	},
 	production: {
-		username: "postgres",
-		password: "uljcvKNwUUbYLcBzQGAptiGHFUAYbblM",
-		database: "railway",
-		host: "autorack.proxy.rlwy.net",
-		port: "11619",
-		dialect: "postgres",
+		username: process.env.PROD_PG_USERNAME,
+		password: process.env.PROD_PG_PASSWORD,
+		database: process.env.PROD_PG_DATABASE,
+		host: process.env.PROD_PG_HOST,
+		port: process.env.PROD_PG_PORT,
+		dialect: process.env.PROD_PG_DIALECT,
 	},
 };
