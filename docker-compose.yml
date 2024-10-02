@@ -9,8 +9,9 @@ services:
             POSTGRES_USER: ${PROD_PG_USERNAME}
             POSTGRES_PASSWORD: ${PROD_PG_PASSWORD}
             POSTGRES_DB: ${PROD_PG_DATABASE}
-            POSTGRES_HOST: PROD_PG_HOST
-            POSTGRES_PORT: PROD_PORT
+            POSTGRES_HOST: ${PROD_PG_HOST}
+            POSTGRES_PORT: ${PROD_PORT}
+            POSTGRES_DIALECT: ${PROD_PG_DIALECT}
         depends_on:
             - db
 
