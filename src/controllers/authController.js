@@ -7,14 +7,13 @@ const ValidationError = require("../errors/ValidationError");
 
 module.exports = {
 	register: async (req, res, next) => {
-		const result = validationResult(req);
-
-		if (!result.isEmpty()) {
-			const message = result
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			const message = errors
 				.array()
 				.map((r) => r.msg)
-				.join(",");
-			return res.status(400).json(message);
+				.join(" | ");
+			return next(new ValidationError(message));
 		}
 
 		try {

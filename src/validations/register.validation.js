@@ -11,14 +11,7 @@ module.exports = [
 		.notEmpty()
 		.withMessage("Email is required")
 		.isEmail()
-		.withMessage("Invalid email")
-		.custom((value) => {
-			if (!value.includes("@")) {
-				throw new Error("Provide valid email");
-			}
-
-			return true;
-		}),
+		.withMessage("Invalid email"),
 	body("password")
 		.isLength({ min: 8 })
 		.withMessage("Password must be at least 8 characters long")
